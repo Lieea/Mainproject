@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Dashboard</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body class="dashboard">
+
+<h2>Vehicle Pollution Dashboard</h2>
+
+<div class="profile top-right" id="profile-toggle" tabindex="0" aria-haspopup="true" aria-expanded="false">
+    <div class="avatar">{{ (profile.username[:1] if profile.username) | upper }}</div>
+    <div class="profile-info">
+        <div class="name">{{ profile.username or 'Guest' }}</div>
+        <div class="meta"><b>MODEL NAME:</b>{{ profile.vehicle_model or 'Model N/A' }}</div>
+        <div class="meta">VEHICLE NUMBER:  {{ profile.vehicle_number or 'No. N/A' }}</div>
+        <div class="meta">AFR: {{ profile.air_fuel_ratio or 'N/A' }}</div>
+    </div>
+
+    <div class="dropdown" role="menu" aria-label="Profile menu">
+        <a role="menuitem" href="/profile">View Profile</a>
+        <a role="menuitem" href="/profile">Edit Profile</a>
+        <a role="menuitem" href="/logout">Logout</a>
+    </div>
+</div>
+
+<div class="circle-container">
+    {% set color = 'green' if pollution < 50 else 'orange' if pollution < 75 else 'red' %}
+    <div id="gauge" class="circle" data-pollution="{{ pollution }}">
+        <div class="gauge-inner">
+            <span id="pollution-value">{{ pollution }}%</span>
+            <div id="status-text">
+                {% if pollution < 50 %}
+                    <b style="color:green">Safe</b>
+                {% elif pollution < 75 %}
+                    <b style="color:orange">Moderate</b>
+                {% else %}
+                    <b style="color:red">High Emission</b>
+                {% endif %}
+            </div>
+        </div>
+        <div id="gauge-knob" class="knob" aria-hidden="true"></div>
+    </div>
+</div>
+
+<div class="controls">
+    <label for="pollution-range">Adjust pollution (demo):</label>
+    <input id="pollution-range" type="range" min="0" max="100" value="{{ pollution }}">
+    <button id="logout">Logout</button>
+</div>
+
+<div class="info">
+    <p>Tip: Use the slider to simulate pollution change; the gauge animates smoothly.</p>
+</div>
+
+<a id="logout-link" href="/logout" style="display:none">Logout</a>
+<div style="margin-top:16px;display:flex;gap:8px;align-items:center">
+    <a href="/stats" class="btn-secondary" id="view-stats">View Stats</a>
+    <a href="/logout" id="logout-visible" class="btn-logout">Logout</a>
+</div>
+
+<script>
+    // expose initial values to JS
+    window.INIT_POLLUTION = {{ pollution }};
+    window.INIT_COLOR = "{{ color }}";
+</script>
+<script src="{{ url_for('static', filename='script.js') }}"></script>
+
+</body>
+</html>

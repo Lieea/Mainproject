@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Pollution Stats</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+<h2>Pollution Summary</h2>
+
+<div class="circle-container">
+    <div class="circle" id="week-gauge" data-pollution="{{ week_avg }}">
+        <div class="gauge-inner">
+            <span id="week-value">{{ week_avg }}%</span>
+            <div id="week-status" class="muted-link">Weekly average</div>
+        </div>
+    </div>
+
+    <div class="circle" id="month-gauge" data-pollution="{{ month_avg }}">
+        <div class="gauge-inner">
+            <span id="month-value">{{ month_avg }}%</span>
+            <div id="month-status" class="muted-link">Monthly average</div>
+        </div>
+    </div>
+</div>
+
+<div class="info" style="margin-top:18px">
+    <strong>Week details</strong>
+    <div class="bars-row week-bars">
+        {% for v in week %}
+            <div class="bar" style="width:18px;height:{{ v }}%;background:linear-gradient(to top,#3b82f6,#60a5fa);opacity:0.9;border-radius:3px"></div>
+        {% endfor %}
+    </div>
+</div>
+
+<div class="info" style="margin-top:18px">
+    <strong>Month details — current calendar month (4 week buckets)</strong>
+    <div class="bars-row month-bars" style="max-width:520px;">
+        {% for v in month_groups %}
+            {% set idx = loop.index0 %}
+            {% set r = month_ranges[idx] %}
+            <div class="bar" title="Avg: {{ v }}% (days {{ r[0] }}–{{ r[1] }})" style="width:90px;height:{{ v }}%;background:linear-gradient(to top,#10b981,#34d399);opacity:0.95;border-radius:6px;display:flex;align-items:flex-end;justify-content:center">
+                <span style="font-size:12px;color:rgba(255,255,255,0.95);padding-bottom:6px">{{ v }}%</span>
+            </div>
+        {% endfor %}
+    </div>
+    <p style="margin-top:8px;color:var(--muted);font-size:13px">Tip: Top gauges show averaged values; use these as quick indicators.</p>
+</div>
+
+<p style="margin-top:22px"><a href="/dashboard">Back to dashboard</a></p>
+
+<script>
+  // simple initializer to paint semicircular gauges
+  function paintGauge(el, value){
+    const v = Number(value);
+    const deg = Math.round(v * 1.8); // 0..180
+    el.style.background = `conic-gradient(from 180deg, ${v < 50 ? 'green' : v < 75 ? 'orange' : 'red'} ${deg}deg, #ddd ${deg}deg)`;
+  }
+
+  document.addEventListener('DOMContentLoaded', ()=>{
+    const wg = document.getElementById('week-gauge');
+    const mg = document.getElementById('month-gauge');
+    if(wg) paintGauge(wg, wg.dataset.pollution);
+    if(mg) paintGauge(mg, mg.dataset.pollution);
+  });
+</script>
+
+</body>
+</html>

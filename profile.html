@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Edit Profile</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+<div class="auth-container">
+  <div class="auth-card">
+    <h2>Edit Profile</h2>
+    <form method="post" id="profile-form">
+      <input type="text" name="vehicle_number" placeholder="Vehicle number" value="{{ profile.vehicle_number }}" required>
+      <input type="text" name="vehicle_model" placeholder="Vehicle model" value="{{ profile.vehicle_model }}" required>
+      <input type="text" name="air_fuel_ratio" placeholder="Air-Fuel Ratio" value="{{ profile.air_fuel_ratio }}">
+      {% if error %}
+        <div class="error" id="profile-error">{{ error }}</div>
+      {% endif %}
+      <div style="display:flex;gap:8px;margin-top:12px">
+        <button type="submit">Save</button>
+        <a href="/dashboard" class="btn-secondary">Cancel</a>
+      </div>
+    </form>
+  </div>
+</div>
+
+</body>
+</html>

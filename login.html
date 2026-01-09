@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Login</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+<div class="auth-container">
+    <div class="auth-card">
+        <h2>Welcome back</h2>
+        <p class="muted-link">Sign in to access your dashboard</p>
+        <form method="post" id="login-form">
+            <input type="text" name="username" id="username" placeholder="Username" required>
+            <div class="password-wrap">
+                <input type="password" name="password" id="password" placeholder="Password" required>
+                <button type="button" class="toggle-password" id="toggle-password">Show</button>
+            </div>
+            <input type="text" name="vehicle_number" id="vehicle_number" placeholder="Vehicle number (optional)">
+            <input type="text" name="vehicle_model" id="vehicle_model" placeholder="Vehicle model (optional)">
+            <input type="text" name="air_fuel_ratio" id="air_fuel_ratio" placeholder="Air-Fuel Ratio (optional)">
+            <div class="field-row">
+                <label><input type="checkbox" name="remember"> Remember me</label>
+            </div>
+            <div class="error" id="form-error" role="alert" aria-live="polite" style="display:none"></div>
+            <button type="submit">Login</button>
+        </form>
+
+        <p style="margin-top:12px">No account? <a href="/signup">Sign up</a></p>
+    </div>
+</div>
+
+<script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>
